@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Attorney Assistant</title>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.18.0/css/mdb.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@100;400&display=swap" rel="stylesheet">
+  <style>
+    html {
+      font-size: 1rem;
+    }
+
+    @include media-breakpoint-up(sm) {
+      html {
+        font-size: 1.2rem;
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      html {
+        font-size: 1.4rem;
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+      html {
+        font-size: 1.6rem;
+      }
+    }
+
+    html,
+    body,
+    header,
+    .view {
+      height: 100%;
+    }
+
+    @media (max-width: 740px) {
+
+      html,
+      body,
+      header,
+      .view {
+        height: 1000px;
+      }
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .view {
+        height: 650px;
+      }
+    }
+
+    .md-form label {
+      color: #ffffff;
+    }
+
+    h6 {
+      line-height: 1.7;
+    }
+
+    .blue-rounded {
+      border-radius: 0.5em;
+      background: linear-gradient(40deg, #45cafc, #303f9f) !important;
+    }
+
+    .scroll {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 991px) {
+      .scroll {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+
+    <!-- Full Page Intro -->
+    <div class="view"
+      style="background-image: url('http://getwallpapers.com/wallpaper/full/f/e/5/944533-free-download-soothing-background-1920x1080-for-retina.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+      <!-- Mask & flexbox options-->
+      <div class="mask align-items-center">
+        <!-- Content -->
+        <div class="container">
+          <!--Grid row-->
+          <div class="row mt-5">
+            <!--Grid column-->
+            <div class="col-md-6 col-xl-4 mb-4">
+              <!--Form-->
+              <div class="card wow fadeInDown" data-wow-delay="0.3s">
+                <div class="card-body">
+                  <!--Header-->
+                  <div class="text-center">
+                    <img src="{{url_for('static', filename='aa.png')}}" class="mx-auto mb-1 img-fluid z-depth-1 rounded-circle" style="width: 100px; height: 100px;" alt="Logo">
+                    <h1 class="h1-responsive" style="font-family: 'Jost', sans-serif;">
+                      Attorney Assistant</h1>
+                  </div>
+                  <!--Body-->
+                  <form role="form" enctype="multipart/form-data" method='POST' action='/' id="mainForm">
+                    <div class="form-group">
+                      <div class="input-group mt-5 mb-4">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                          <input type="file" name="file" class="form-control custom-file-input" aria-describedby="fileInput" id="file" required>
+                          <label class="custom-file-label" style="overflow-y: hidden;" for="fileInput">.pdf files only</label>
+                        </div>
+                      </div>
+                      <!--<textarea name="text" class="form-control" id="text-box" placeholder="Enter Text" style="max-width: 1800px; height: 500px" autofocus required></textarea>-->
+                      <!-- <input type="file" name="file" class="form-control" id="file" required> -->
+
+                      <select id="methodSelector" class="browser-default custom-select" form="mainForm" name="methodSelected" required>
+                        <option selected value="">Choose a summarization method:</option>
+                        <option value="lexrank">Lexrank</option>
+                        <option value="textrank">Textrank</option>
+                        <option value="lsa">LSA</option>
+                      </select>
+
+                    </div>
+
+                    <div class="text-center mt-4">
+                      <button type="submit" class="btn text-white waves-effect waves-light blue-rounded" value="Upload">Summarize</button>
+                    </div>
+                  </form>
+                  <br>
+                  {% for error in errors %}
+                  <div class=" wow shakeX" data-wow-delay="0.3s">
+                  <p class="note note-danger">{{ error }}</p></div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!--/.Form-->
+            </div>
+
+            <div class="col-md-6 col-xl-8 mb-4">
+              <div class="card wow fadeInDown" data-wow-delay="0.3s">
+                <div class="card-body scroll">
+                  {% if results %}
+                  <p>
+                  <div class="container">
+                    <div id="results" style="margin: 10px">
+                      <h4 class="text-center">Summary</h4>
+                      <br>
+                      <hr class="hr-dark">
+                      {{ results }}
+                    </div>
+                  </div>
+                  </p>
+                  {% else %}
+                  <div class="container">
+                    <div id="resultsPlaceholder" style="border: 3px dotted #c3c3c3;">
+                      <h5 class="p-5 text-center" style="color: #aaaaaa;">Summary will appear here</h5>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!--Grid column-->
+          </div>
+          <!--Grid row-->
+        </div>
+        <!-- Content -->
+      </div>
+      <!-- Mask & flexbox options-->
+    </div>
+    <!-- Full Page Intro -->
+  </header>
+  <!-- Main navigation -->
+  <!--Main Layout-->
+  <!-- <main> -->
+  <!-- <div class="container"> -->
+  <!--Grid row-->
+  <!-- <div class="row py-5"> -->
+  <!--Grid column-->
+  <!-- <div class="col-md-12 text-center"> -->
+
+  <!-- </div> -->
+  <!--Grid column-->
+  <!-- </div> -->
+  <!-- Grid row -->
+  <!-- </div> -->
+  <!-- </main> -->
+  <!--Main Layout-->
+
+
+
+
+
+
+  <!-- JQuery -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.18.0/js/mdb.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.2.2/web-animations.min.js"></script>
+  <script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+  </script>
+</body>
+
+</html>
