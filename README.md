@@ -2,4 +2,4 @@
 Text Summarizer
 
 
-NO
+NO for fun
